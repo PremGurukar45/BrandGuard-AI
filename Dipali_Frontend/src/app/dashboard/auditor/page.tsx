@@ -1,221 +1,296 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FileSearch,
   Sparkles,
   AlertTriangle,
   CheckCircle2,
-  ArrowRight,
   ShieldCheck,
-  Clock3,
-  FileText,
-  Info,
+  Loader2,
   Pencil,
-  ShieldAlert,
+  Copy,
 } from "lucide-react";
+import { apiRequest } from "../../../lib/api";
+
+type Brand = {
+  id: string;
+  brand_name: string;
+};
+
+type Violation = {
+  [key: string]: unknown;
+};
+
+type AnalysisResult = {
+  id: string;
+  brand_profile_id: string;
+  content_text: string;
+  content_type: string;
+  compliance_score: number;
+  ai_summary: string;
+  violations: Violation[] | string[];
+  corrected_content: string;
+};
 
 export default function AuditorPage() {
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [brandId, setBrandId] = useState("");
   const [content, setContent] = useState("");
-  const [reviewed, setReviewed] = useState(false);
+  const [contentType, setContentType] = useState("social_media");
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [loadingBrands, setLoadingBrands] = useState(true);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleReview = () => {
-    if (!content.trim()) return;
-    setReviewed(true);
+  useEffect(() => {
+    const loadBrands = async () => {
+      try {
+        const data = await apiRequest<Brand[]>("/brands");
+        setBrands(data);
+        if (data.length > 0) setBrandId(data[0].id);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Unable to load brands."
+        );
+      } finally {
+        setLoadingBrands(false);
+      }
+    };
+
+    loadBrands();
+  }, []);
+
+  const handleReview = async () => {
+    if (!brandId || content.trim().length < 10) return;
+
+    setAnalyzing(true);
+    setError("");
+    setResult(null);
+
+    try {
+      const data = await apiRequest<AnalysisResult>("/analyses", {
+        method: "POST",
+        body: {
+          brand_profile_id: brandId,
+          content_text: content.trim(),
+          content_type: contentType,
+        },
+      });
+
+      setResult(data);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Content analysis failed."
+      );
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const getViolationText = (item: Violation | string) => {
+    if (typeof item === "string") return item;
+
+    return Object.entries(item)
+      .map(([key, value]) => `${key}: ${String(value)}`)
+      .join(" · ");
   };
 
   return (
     <main className="dashboard-content auditor-page">
-
-      {/* PAGE HEADER */}
       <div className="page-heading">
         <div>
           <p className="eyebrow">AI CONTENT AUDITOR</p>
           <h1>Let's check your content</h1>
           <p>
-            Share your draft and we'll help you spot anything
-            that might not match your brand.
+            Review your content against your saved brand guidelines.
           </p>
         </div>
       </div>
 
-      {/* CONTENT INPUT */}
       <section className="content-panel auditor-panel">
         <div className="panel-heading">
           <div>
             <h2>Your content</h2>
-            <p>
-              Paste the text you'd like BrandGuard to review.
-            </p>
+            <p>Choose a brand and paste the content you want reviewed.</p>
           </div>
-          <div className="auditor-heading-icon">
-            <FileSearch size={23} />
-          </div>
+          <FileSearch size={23} />
         </div>
 
+        <label htmlFor="auditor-brand">Select brand profile</label>
+        <select
+          id="auditor-brand"
+          value={brandId}
+          onChange={(e) => setBrandId(e.target.value)}
+          disabled={loadingBrands || brands.length === 0}
+        >
+          {loadingBrands && <option>Loading brands...</option>}
+          {!loadingBrands && brands.length === 0 && (
+            <option value="">No saved brands available</option>
+          )}
+          {brands.map((brand) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.brand_name}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor="auditor-type">Content type</label>
+        <select
+          id="auditor-type"
+          value={contentType}
+          onChange={(e) => setContentType(e.target.value)}
+        >
+          <option value="social_media">Social Media</option>
+          <option value="advertisement">Advertisement</option>
+          <option value="email">Email</option>
+          <option value="website">Website</option>
+        </select>
+
+        <label htmlFor="auditor-content">Content to review</label>
         <textarea
+          id="auditor-content"
           className="auditor-textarea"
           placeholder="Paste your marketing copy, social media caption, advertisement or other content here..."
           value={content}
+          maxLength={10000}
           onChange={(e) => {
             setContent(e.target.value);
-            setReviewed(false);
+            setResult(null);
+            setError("");
           }}
         />
 
         <div className="auditor-footer">
-          <span>{content.length} characters</span>
+          <span>{content.length} / 10,000 characters</span>
 
           <button
             className="primary-button"
             onClick={handleReview}
-            disabled={!content.trim()}
+            disabled={
+              analyzing ||
+              !brandId ||
+              content.trim().length < 10 ||
+              loadingBrands
+            }
           >
-            <Sparkles size={17} />
-            Review my content
+            {analyzing ? (
+              <>
+                <Loader2 size={17} />
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <Sparkles size={17} />
+                Review my content
+              </>
+            )}
           </button>
         </div>
       </section>
 
-      {/* REVIEW PREVIEW */}
-      {reviewed && (
-        <section className="content-panel professional-review">
+      {error && (
+        <div className="brands-message brands-error" role="alert">
+          <AlertTriangle size={18} />
+          {error}
+        </div>
+      )}
 
-          {/* RESULT HEADER */}
+      {result && (
+        <section className="content-panel professional-review">
           <div className="review-header">
             <div>
-              <p className="eyebrow">REVIEW PREVIEW</p>
+              <p className="eyebrow">ANALYSIS COMPLETE</p>
               <h2>Your content review</h2>
-              <p className="review-subtitle">
-                Here's the current status of your submitted draft.
-              </p>
+              <p className="review-subtitle">{result.ai_summary}</p>
             </div>
-
-            <span className="demo-status">
-              <span className="status-dot"></span>
-              Demo Mode
-            </span>
+            <ShieldCheck size={28} />
           </div>
 
-          {/* DEMO NOTICE */}
-          <div className="demo-banner">
-            <div className="demo-banner-icon">
-              <Info size={21} />
-            </div>
-            <div>
-              <strong>Backend analysis is not connected</strong>
-              <p>
-                Your content was received locally. Actual brand
-                compliance results will appear once the backend
-                analysis is integrated.
-              </p>
-            </div>
-          </div>
-
-          {/* SUMMARY CARDS */}
           <div className="review-summary-grid">
-
             <div className="review-summary-card">
               <div className="summary-card-icon blue-icon">
-                <FileText size={21} />
+                <ShieldCheck size={21} />
               </div>
               <div>
-                <span>Content submitted</span>
-                <strong>Received</strong>
-                <small>{content.length} characters</small>
+                <span>Compliance score</span>
+                <strong>{result.compliance_score}/100</strong>
+                <small>Backend analysis result</small>
               </div>
             </div>
 
             <div className="review-summary-card">
               <div className="summary-card-icon orange-icon">
-                <ShieldAlert size={21} />
+                <AlertTriangle size={21} />
               </div>
               <div>
-                <span>Brand compliance</span>
-                <strong>Not checked</strong>
-                <small>Awaiting backend analysis</small>
+                <span>Violations detected</span>
+                <strong>{result.violations?.length ?? 0}</strong>
+                <small>Reported by the backend</small>
               </div>
             </div>
 
             <div className="review-summary-card">
               <div className="summary-card-icon purple-icon">
-                <Clock3 size={21} />
+                <CheckCircle2 size={21} />
               </div>
               <div>
                 <span>Review status</span>
-                <strong>Pending</strong>
-                <small>Analysis not started</small>
+                <strong>Completed</strong>
+                <small>Analysis saved</small>
               </div>
             </div>
-
           </div>
 
-          {/* ANALYSIS STEPS */}
           <div className="review-details">
-            <h3>Analysis overview</h3>
-            <p className="review-details-description">
-              These are the checks BrandGuard will perform
-              when backend integration is active.
-            </p>
+            <h3>Detected violations</h3>
 
-            <div className="review-step">
-              <div className="review-step-icon completed-step">
-                <CheckCircle2 size={20} />
+            {result.violations?.length ? (
+              <div className="activity-list">
+                {result.violations.map((item, index) => (
+                  <div className="activity-item" key={index}>
+                    <AlertTriangle size={19} />
+                    <p>{getViolationText(item)}</p>
+                  </div>
+                ))}
               </div>
-              <div className="review-step-content">
-                <strong>Content submission</strong>
-                <p>Your draft has been received successfully.</p>
-              </div>
-              <span className="step-completed">Received</span>
-            </div>
+            ) : (
+              <p>No violations were returned by the analysis.</p>
+            )}
+          </div>
 
-            <div className="review-step">
-              <div className="review-step-icon pending-step">
-                <ShieldCheck size={20} />
-              </div>
-              <div className="review-step-content">
-                <strong>Brand guideline verification</strong>
-                <p>
-                  Check content against your approved brand rules.
-                </p>
-              </div>
-              <span className="step-pending">Pending</span>
-            </div>
-
-            <div className="review-step">
-              <div className="review-step-icon pending-step">
-                <Sparkles size={20} />
-              </div>
-              <div className="review-step-content">
-                <strong>Improvement recommendations</strong>
-                <p>
-                  Identify potential issues and suggest improvements.
-                </p>
-              </div>
-              <span className="step-pending">Pending</span>
+          <div className="review-details">
+            <h3>Recommended corrected content</h3>
+            <div className="corrected-content">
+              <p>{result.corrected_content || "No correction was returned."}</p>
+              {result.corrected_content && (
+                <button
+                  className="secondary-button"
+                  onClick={() =>
+                    navigator.clipboard.writeText(result.corrected_content)
+                  }
+                >
+                  <Copy size={16} />
+                  Copy corrected content
+                </button>
+              )}
             </div>
           </div>
 
-          {/* FOOTER */}
           <div className="review-footer">
-            <div className="review-footer-note">
-              <Info size={17} />
-              <span>
-                No compliance score or violations have been generated.
-              </span>
-            </div>
-
+            <span>
+              <CheckCircle2 size={17} />
+              Actual backend analysis result
+            </span>
             <button
               className="secondary-button"
-              onClick={() => setReviewed(false)}
+              onClick={() => setResult(null)}
             >
               <Pencil size={16} />
-              Edit content
-              <ArrowRight size={16} />
+              Review another draft
             </button>
           </div>
-
         </section>
       )}
     </main>
