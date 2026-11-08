@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -7,6 +8,12 @@ import {
   AlertTriangle,
   CheckCircle2,
   ArrowRight,
+  ShieldCheck,
+  Clock3,
+  FileText,
+  Info,
+  Pencil,
+  ShieldAlert,
 } from "lucide-react";
 
 export default function AuditorPage() {
@@ -19,7 +26,9 @@ export default function AuditorPage() {
   };
 
   return (
-    <main className="dashboard-content">
+    <main className="dashboard-content auditor-page">
+
+      {/* PAGE HEADER */}
       <div className="page-heading">
         <div>
           <p className="eyebrow">AI CONTENT AUDITOR</p>
@@ -31,13 +40,18 @@ export default function AuditorPage() {
         </div>
       </div>
 
+      {/* CONTENT INPUT */}
       <section className="content-panel auditor-panel">
         <div className="panel-heading">
           <div>
             <h2>Your content</h2>
-            <p>Paste the text you'd like BrandGuard to review.</p>
+            <p>
+              Paste the text you'd like BrandGuard to review.
+            </p>
           </div>
-          <FileSearch size={24} />
+          <div className="auditor-heading-icon">
+            <FileSearch size={23} />
+          </div>
         </div>
 
         <textarea
@@ -52,6 +66,7 @@ export default function AuditorPage() {
 
         <div className="auditor-footer">
           <span>{content.length} characters</span>
+
           <button
             className="primary-button"
             onClick={handleReview}
@@ -63,44 +78,144 @@ export default function AuditorPage() {
         </div>
       </section>
 
+      {/* REVIEW PREVIEW */}
       {reviewed && (
-        <section className="content-panel result-panel">
-          <div className="panel-heading">
+        <section className="content-panel professional-review">
+
+          {/* RESULT HEADER */}
+          <div className="review-header">
             <div>
               <p className="eyebrow">REVIEW PREVIEW</p>
-              <h2>Here's what we noticed</h2>
+              <h2>Your content review</h2>
+              <p className="review-subtitle">
+                Here's the current status of your submitted draft.
+              </p>
             </div>
-            <AlertTriangle size={23} />
+
+            <span className="demo-status">
+              <span className="status-dot"></span>
+              Demo Mode
+            </span>
           </div>
 
-          <div className="review-notice">
-            <AlertTriangle size={20} />
+          {/* DEMO NOTICE */}
+          <div className="demo-banner">
+            <div className="demo-banner-icon">
+              <Info size={21} />
+            </div>
             <div>
-              <strong>Demo review only</strong>
+              <strong>Backend analysis is not connected</strong>
               <p>
-                Your text has been submitted locally. Connect the
-                BrandGuard AI backend to receive real brand checks.
+                Your content was received locally. Actual brand
+                compliance results will appear once the backend
+                analysis is integrated.
               </p>
             </div>
           </div>
 
-          <div className="review-notice success-notice">
-            <CheckCircle2 size={20} />
-            <div>
-              <strong>Your draft is ready for analysis</strong>
-              <p>
-                The next step is checking it against your approved
-                brand guidelines and facts.
-              </p>
+          {/* SUMMARY CARDS */}
+          <div className="review-summary-grid">
+
+            <div className="review-summary-card">
+              <div className="summary-card-icon blue-icon">
+                <FileText size={21} />
+              </div>
+              <div>
+                <span>Content submitted</span>
+                <strong>Received</strong>
+                <small>{content.length} characters</small>
+              </div>
+            </div>
+
+            <div className="review-summary-card">
+              <div className="summary-card-icon orange-icon">
+                <ShieldAlert size={21} />
+              </div>
+              <div>
+                <span>Brand compliance</span>
+                <strong>Not checked</strong>
+                <small>Awaiting backend analysis</small>
+              </div>
+            </div>
+
+            <div className="review-summary-card">
+              <div className="summary-card-icon purple-icon">
+                <Clock3 size={21} />
+              </div>
+              <div>
+                <span>Review status</span>
+                <strong>Pending</strong>
+                <small>Analysis not started</small>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ANALYSIS STEPS */}
+          <div className="review-details">
+            <h3>Analysis overview</h3>
+            <p className="review-details-description">
+              These are the checks BrandGuard will perform
+              when backend integration is active.
+            </p>
+
+            <div className="review-step">
+              <div className="review-step-icon completed-step">
+                <CheckCircle2 size={20} />
+              </div>
+              <div className="review-step-content">
+                <strong>Content submission</strong>
+                <p>Your draft has been received successfully.</p>
+              </div>
+              <span className="step-completed">Received</span>
+            </div>
+
+            <div className="review-step">
+              <div className="review-step-icon pending-step">
+                <ShieldCheck size={20} />
+              </div>
+              <div className="review-step-content">
+                <strong>Brand guideline verification</strong>
+                <p>
+                  Check content against your approved brand rules.
+                </p>
+              </div>
+              <span className="step-pending">Pending</span>
+            </div>
+
+            <div className="review-step">
+              <div className="review-step-icon pending-step">
+                <Sparkles size={20} />
+              </div>
+              <div className="review-step-content">
+                <strong>Improvement recommendations</strong>
+                <p>
+                  Identify potential issues and suggest improvements.
+                </p>
+              </div>
+              <span className="step-pending">Pending</span>
             </div>
           </div>
 
-          <button
-            className="secondary-button"
-            onClick={() => setReviewed(false)}
-          >
-            Edit content <ArrowRight size={16} />
-          </button>
+          {/* FOOTER */}
+          <div className="review-footer">
+            <div className="review-footer-note">
+              <Info size={17} />
+              <span>
+                No compliance score or violations have been generated.
+              </span>
+            </div>
+
+            <button
+              className="secondary-button"
+              onClick={() => setReviewed(false)}
+            >
+              <Pencil size={16} />
+              Edit content
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
         </section>
       )}
     </main>

@@ -1,4 +1,6 @@
 
+import { supabase } from "./supabase";
+
 const API_ORIGIN =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/v1\/?$/, "") ??
   "http://127.0.0.1:8001";
@@ -45,7 +47,28 @@ export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  return request<T>(`${API_BASE_URL}${path}`, options);
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error) {
+    throw new Error("Unable to retrieve your login session.");
+  }
+
+  const headers = new Headers(options.headers);
+
+  if (session?.access_token) {
+    headers.set(
+      "Authorization",
+      `Bearer ${session.access_token}`
+    );
+  }
+
+  return request<T>(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
 }
 
 export const api = {
