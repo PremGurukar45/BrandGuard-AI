@@ -3158,3 +3158,438 @@ label {
   }
 }
 
+
+/* ========================================
+   BRANDGUARD AI — LIGHT & DARK THEMES
+======================================== */
+
+/* Light theme */
+html.light {
+  color-scheme: light;
+
+  --theme-border: #dbe2ea;
+  --theme-active-bg: #2563eb;
+}
+
+/* Dark theme */
+html.dark {
+  color-scheme: dark;
+
+  --bg: #0b1220;
+  --surface: #151f30;
+  --surface-soft: #1c293b;
+  --surface-hover: #26364b;
+
+  --primary: #2563eb;
+  --primary-dark: #93c5fd;
+  --primary-light: #1e3a5f;
+  --accent: #60a5fa;
+
+  --text: #f1f5f9;
+  --muted: #a5b4c7;
+  --border: #334155;
+
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --success: #4ade80;
+
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+  --theme-border: #334155;
+  --theme-active-bg: #2563eb;
+}
+
+/* Base appearance */
+html.dark body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--muted);
+}
+
+/* Theme switcher */
+.theme-switcher {
+  background: var(--surface-soft);
+}
+
+.theme-option {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.theme-option:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   BRANDGUARD AI — DARK DASHBOARD FIX
+======================================== */
+
+/* Main dashboard backgrounds */
+html.dark body,
+html.dark .app-shell,
+html.dark .app-main,
+html.dark .page-content,
+html.dark .dashboard-home,
+html.dark .dashboard-content {
+  background: #0b1220 !important;
+  color: #f1f5f9;
+}
+
+/* Sidebar and top navigation */
+html.dark .sidebar,
+html.dark .app-sidebar,
+html.dark .topbar {
+  background: #151f30 !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Dashboard cards */
+html.dark .dashboard-stat-card,
+html.dark .dashboard-panel,
+html.dark .dashboard-insight,
+html.dark .content-panel,
+html.dark .stat-card,
+html.dark .activity-item {
+  background: #151f30 !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Make headings readable */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark .dashboard-stat-card strong,
+html.dark .dashboard-activity-info strong,
+html.dark .dashboard-quick-actions strong {
+  color: #f1f5f9 !important;
+}
+
+/* Secondary text */
+html.dark .dashboard-home p,
+html.dark .dashboard-content p,
+html.dark .dashboard-stat-card small,
+html.dark .dashboard-activity-info span,
+html.dark .dashboard-quick-actions small {
+  color: #a5b4c7;
+}
+
+/* Sidebar navigation */
+html.dark .sidebar a,
+html.dark .app-sidebar a {
+  color: #cbd5e1;
+}
+
+html.dark .sidebar a:hover,
+html.dark .app-sidebar a:hover {
+  background: #26364b;
+}
+
+/* Card dividers */
+html.dark .dashboard-activity,
+html.dark .dashboard-quick-actions a {
+  border-color: #334155 !important;
+}
+
+/* Forms */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background: #1c293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+/* Keep primary buttons blue */
+html.dark .primary-button,
+html.dark .dashboard-primary-button {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Smooth theme changes */
+body,
+.app-shell,
+.app-main,
+.page-content,
+.topbar,
+.sidebar,
+.dashboard-stat-card,
+.dashboard-panel {
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
+}
+
+/* ========================================
+   DARK MODE — WORKSPACE CARD FIX
+======================================== */
+
+html.dark .sidebar-workspace {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px;
+}
+
+html.dark .sidebar-workspace strong {
+  color: #f8fafc !important;
+  font-weight: 700;
+}
+
+html.dark .sidebar-workspace small {
+  color: #94a3b8 !important;
+}
+
+html.dark .workspace-avatar {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* ========================================
+   BRANDGUARD AI — DARK MODE READABILITY FIX
+======================================== */
+
+/* Dashboard and review result cards */
+html.dark .summary-card,
+html.dark .professional-review,
+html.dark .stat-card,
+html.dark .dashboard-stat-card,
+html.dark .dashboard-panel,
+html.dark .content-panel,
+html.dark .brand-card,
+html.dark .brand-profile-card,
+html.dark .review-result-card,
+html.dark .activity-item {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+/* Card headings and main numbers */
+html.dark .summary-card h2,
+html.dark .summary-card h3,
+html.dark .summary-card strong,
+html.dark .professional-review h2,
+html.dark .professional-review h3,
+html.dark .professional-review strong,
+html.dark .stat-card h2,
+html.dark .stat-card strong,
+html.dark .brand-card h3,
+html.dark .brand-profile-card h3 {
+  color: #f8fafc !important;
+}
+
+/* Descriptions and supporting text */
+html.dark .summary-card p,
+html.dark .professional-review p,
+html.dark .stat-card p,
+html.dark .brand-card p,
+html.dark .brand-profile-card p {
+  color: #cbd5e1 !important;
+}
+
+/* Topbar text */
+html.dark .topbar-left,
+html.dark .topbar-left strong,
+html.dark .topbar-user,
+html.dark .topbar-user span:not(.user-avatar) {
+  color: #f1f5f9 !important;
+}
+
+/* Topbar icons */
+html.dark .topbar-icon {
+  color: #cbd5e1 !important;
+}
+
+/* Secondary buttons */
+html.dark .secondary-button,
+html.dark .review-actions .secondary-button {
+  background: #26364b !important;
+  color: #f8fafc !important;
+  border: 1px solid #475569 !important;
+}
+
+html.dark .secondary-button:hover {
+  background: #334155 !important;
+}
+
+/* Result boxes */
+html.dark .result-panel,
+html.dark .review-notice:not(.success-notice) {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+/* Form fields */
+html.dark input,
+html.dark select,
+html.dark textarea,
+html.dark .auditor-textarea {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+/* Preserve readable text in dark cards */
+html.dark .content-panel h2,
+html.dark .content-panel h3,
+html.dark .content-panel strong {
+  color: #f8fafc;
+}
+
+/* Keyboard accessibility */
+html.dark button:focus-visible,
+html.dark a:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+/* ========================================
+   DARK MODE — CONTENT AUDITOR RESULT FIX
+======================================== */
+
+/* Three summary cards */
+html.dark .review-summary-card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+}
+
+/* Summary card headings and values */
+html.dark .review-summary-card h2,
+html.dark .review-summary-card h3,
+html.dark .review-summary-card strong {
+  color: #f8fafc !important;
+}
+
+/* Summary card descriptions */
+html.dark .review-summary-card p,
+html.dark .review-summary-card small {
+  color: #a5b4c7 !important;
+}
+
+/* Detected violations and corrected content */
+html.dark .review-details,
+html.dark .corrected-content {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+/* Section headings */
+html.dark .review-details h2,
+html.dark .review-details h3,
+html.dark .review-details strong,
+html.dark .corrected-content strong {
+  color: #f8fafc !important;
+}
+
+/* Text inside result sections */
+html.dark .review-details p,
+html.dark .corrected-content p {
+  color: #cbd5e1 !important;
+}
+
+/* Review details icons */
+html.dark .review-details svg {
+  color: #93c5fd;
+}
+
+/* Ensure secondary buttons remain readable */
+html.dark .review-details .secondary-button {
+  background: #26364b !important;
+  color: #ffffff !important;
+  border: 1px solid #475569 !important;
+}
+
+/* =========================================
+   BRANDGUARD AI — AUTH LIGHT MODE FIX
+========================================= */
+
+/* Registration and login background */
+html.light .auth-page {
+  background: #f1f5ff !important;
+  color: #172033 !important;
+}
+
+/* Left registration/login panel */
+html.light .auth-panel {
+  background: #ffffff !important;
+  color: #172033 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Main headings and descriptions */
+html.light .auth-content h1,
+html.light .auth-content h2 {
+  color: #172033 !important;
+}
+
+html.light .auth-content p,
+html.light .auth-switch {
+  color: #64748b !important;
+}
+
+/* Form labels */
+html.light .auth-form label {
+  color: #334155 !important;
+}
+
+/* Input fields */
+html.light .auth-form input {
+  background: #f8fafc !important;
+  color: #172033 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html.light .auth-form input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light .auth-form input:focus {
+  border-color: #2563eb !important;
+  outline: 2px solid rgba(37, 99, 235, 0.15);
+}
+
+/* Password visibility button */
+html.light .password-toggle {
+  color: #64748b !important;
+}
+
+/* Right information panel */
+html.light .auth-aside {
+  background: #eaf1ff !important;
+  color: #172033 !important;
+}
+
+html.light .auth-aside h1,
+html.light .auth-aside h2 {
+  color: #172033 !important;
+}
+
+html.light .auth-aside p {
+  color: #526581 !important;
+}
+
+/* Blue section labels */
+html.light .auth-aside .eyebrow,
+html.light .auth-content .eyebrow {
+  color: #2563eb !important;
+}

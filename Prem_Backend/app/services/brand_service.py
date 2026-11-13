@@ -12,10 +12,18 @@ class BrandService:
             settings.SUPABASE_URL,
             settings.SUPABASE_ANON_KEY,
         )
+
+        # Use the authenticated user's access token
         client.postgrest.auth(access_token)
+
         return client
 
-    def create_brand(self, brand_data: dict, user_id: str, access_token: str):
+    def create_brand(
+        self,
+        brand_data: dict,
+        user_id: str,
+        access_token: str,
+    ):
         try:
             client = self.get_client(access_token)
 
@@ -32,21 +40,37 @@ class BrandService:
 
             if not result.data:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Brand profile creation failed.",
                 )
+
+            print("BRAND CREATED SUCCESSFULLY")
 
             return result.data[0]
 
         except HTTPException:
             raise
-        except Exception:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Unable to create brand profile. Check your input and permissions.",
+
+        except Exception as exc:
+            print(
+                "BRAND CREATION ERROR:",
+                type(exc).__name__,
+                str(exc),
             )
 
-    def get_brands(self, user_id: str, access_token: str):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    "Unable to create brand profile. "
+                    "Check your input and permissions."
+                ),
+            )
+
+    def get_brands(
+        self,
+        user_id: str,
+        access_token: str,
+    ):
         try:
             client = self.get_client(access_token)
 
@@ -60,7 +84,13 @@ class BrandService:
 
             return result.data or []
 
-        except Exception:
+        except Exception as exc:
+            print(
+                "BRAND FETCH ERROR:",
+                type(exc).__name__,
+                str(exc),
+            )
+
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Unable to retrieve brand profiles.",

@@ -11,7 +11,7 @@ from app.routes.analyses import router as analyses_router
 
 # ==========================================
 # BRANDGUARD AI - MAIN APPLICATION
-# ==========================================
+#==========================================
 
 app = FastAPI(
     title=settings.APP_NAME,
