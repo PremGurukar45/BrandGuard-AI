@@ -892,19 +892,22 @@ export default function BrandsPage() {
                   Brand name
                 </label>
 
-                <input
-                  id="brand-name"
-                  style={inputStyle}
-                  autoFocus
-                  value={brandName}
-                  onChange={(event) =>
-                    setBrandName(event.target.value)
-                  }
-                  placeholder="e.g. NovaTech"
-                  minLength={2}
-                  maxLength={150}
-                  required
-                />
+
+<input
+  id="brand-name"
+  style={inputStyle}
+  autoFocus
+  autoComplete="off"
+  value={brandName}
+  onChange={(event) =>
+    setBrandName(event.target.value)
+  }
+  placeholder="Enter your brand name"
+  minLength={2}
+  maxLength={150}
+  required
+/>
+
               </div>
 
               <div>

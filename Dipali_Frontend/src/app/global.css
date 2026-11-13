@@ -3593,3 +3593,73 @@ html.light .auth-aside .eyebrow,
 html.light .auth-content .eyebrow {
   color: #2563eb !important;
 }
+
+/* ========================================
+   BRANDGUARD AI — LANDING PAGE READABILITY
+   Keep landing page light in both themes
+======================================== */
+
+.marketing-page {
+  color-scheme: light;
+
+  --text: #202124;
+  --muted: #5f6368;
+  --border: #dadce0;
+  --surface: #ffffff;
+  --surface-soft: #f8fafd;
+  --primary-dark: #1a73e8;
+  --primary-light: #e8f0fe;
+
+  color: #202124;
+}
+
+html.dark .marketing-page h1,
+html.dark .marketing-page h2,
+html.dark .marketing-page h3,
+html.dark .marketing-page h4,
+html.dark .marketing-page h5,
+html.dark .marketing-page h6 {
+  color: #202124 !important;
+}
+
+/* =========================================
+   BRANDGUARD AI — AUTH TEXT VISIBILITY FIX
+========================================= */
+
+html .auth-page {
+  color-scheme: light;
+  color: #172033 !important;
+}
+
+html .auth-page .auth-panel {
+  background: #ffffff !important;
+  color: #172033 !important;
+}
+
+/* Fix invisible main headings */
+html .auth-page .auth-content h1,
+html .auth-page .auth-content h2 {
+  color: #172033 !important;
+}
+
+/* Fix invisible right-side heading */
+html .auth-page .auth-aside h1,
+html .auth-page .auth-aside h2 {
+  color: #172033 !important;
+}
+
+/* Keep highlighted text blue */
+html .auth-page .auth-aside h2 em {
+  color: #3b82f6 !important;
+}
+
+/* Fix dark inputs on light background */
+html .auth-page .auth-form input {
+  background: #f8fafc !important;
+  color: #172033 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html .auth-page .auth-form input::placeholder {
+  color: #64748b !important;
+}
